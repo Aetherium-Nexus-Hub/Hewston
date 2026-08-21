@@ -1,36 +1,44 @@
-# 🏛 OBSERVX: MASTER INFRASTRUCTURE NOTEBOOK
-Last Updated: May 2026
-Environment: Android (Termux) / Local (Node.js) / AI Studio
-System Auditor: The Paralegal v1.0
+# Hewston: ObservX Master Infrastructure
 
-## 1. STRUCTURAL CONSTRAINTS (THE KINETIC RULES)
-- **Maintain the Lattice**: Do not fragment focus. Context switching between local hardware (ESP32), the Veldt dashboard, and remote Vercel deployments introduces high Divergence (D) and tanks the coherence score (￼).
-- **Clear Bottlenecks First**: The Observer must be stable before opening the TravGuild pipeline or firing Tier 2 Probes ("The Velocity of Trust").
-- **No Narrative Bleed**: Documentation and telemetry must remain objective, structural, and factual.
+**Description:** The administrative core and cosmic telemetry ledger for the ObservX ecosystem. Featuring real-time infrastructure audits and kinetic rule enforcement.
 
-## 2. MOBILE DEVOPS: ANDROID TERMINAL PIPELINE
-Frictionless, fully automated Termux setup to handle Git synchronization with conflict safety.
+## Overview
 
-### A. Termux Setup
-Grant storage access and install dependencies.
+Hewston serves as the administrative nerve center and cosmic telemetry ledger for the ObservX ecosystem. It is engineered to perform real-time infrastructure audits and enforce kinetic rules, ensuring the stability and coherence of the entire network.
 
-### B. The Failsafe Auto-Sync Script (autosync_failsafe.sh)
-This script auto-commits, rebases, and handles conflicts by creating a backup branch and hard-resetting main to match the remote, preventing the mobile environment from locking up.
+## Structural Constraints (The Kinetic Rules)
 
-## 3. AUDIT PROTOCOL: THE PARALEGAL
-To maintain the Public Record (GitHub README), provide the following telemetry packet whenever a system shift occurs.
+*   **Maintain the Lattice:** Focus must remain unified to prevent fragmentation and maintain high coherence scores.
+*   **System Stability First:** The Observer must be fully stable before initiating higher-tier probes or pipelines.
+*   **Objective Telemetry:** All documentation and system telemetry must remain objective, structural, and factual.
 
-### Telemetry Packet Requirements:
-1. Node Environment: `node -v` | `npm -v`
-2. Active Dockets: Current blocking issues.
-3. ￼ Stability: Narrative-to-code translation accuracy (Range: 0.0 - 1.0).
+## Features
 
-## 4. CURRENT REPOSITORY REGISTRY
-| Repository | Role | Status |
-| :--- | :--- | :--- |
-| **Hewston** | Gemini App Starter (Local) | ACTIVE |
-| **The-Paralegal-** | GitHub Controller | ACTIVE |
-| **ObservX-Core** | Master Foundation | PENDING AUDIT |
+*   **Real-Time Infrastructure Audits:** Continuous monitoring and verification of system health.
+*   **Kinetic Rule Enforcement:** Automated enforcement of operational constraints to prevent system divergence.
+*   **Cosmic Telemetry Ledger:** A persistent, immutable record of all system-wide telemetry events.
 
----
-End of Ledger.
+## Getting Started
+
+### Prerequisites
+
+*   Node.js
+
+### Local Development
+
+1.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+2.  **Run the application:**
+    ```bash
+    npm run dev
+    ```
+
+## Contribution
+
+Contributions must adhere to the structural constraints and objective reporting standards of the ObservX ecosystem.
+
+## License
+
+[License Information]

@@ -1,0 +1,80 @@
+{
+  "users": [
+    {
+      "id": "user-admin",
+      "username": "admin",
+      "passwordHash": "$2b$10$Nx17BIMvdZor1LxL.l87Q..gjYBFclYQTeaaIZ.xB8lRwScSzV1qW",
+      "createdAt": "2026-11-10T19:48:16.412Z",
+      "email": "admin@observx.io",
+      "nodeRole": "System Auditor",
+      "nodeLoc": "Core Lattice-01",
+      "securityQuestion": "What is your first terminal?",
+      "securityAnswerHash": "$2b$10$5uVThwOUh5.Lpn1hLt2BCudi5QFL7P8r/BlMHInpbNtgdDZfRrNrC"
+    }
+  ],
+  "dockets": [
+    {
+      "id": "docket-1",
+      "title": "Termux auto-sync secured validation",
+      "status": "ACTIVE",
+      "timestamp": "2026-11-10T19:48:16.487Z",
+      "priority": "HIGH"
+    },
+    {
+      "id": "docket-2",
+      "title": "Paralegal protocol locked under token: JWT_HS256",
+      "status": "ACTIVE",
+      "timestamp": "2026-11-10T19:48:16.487Z",
+      "priority": "NORMAL"
+    },
+    {
+      "id": "docket-3",
+      "title": "Kinetic rule coherence verification",
+      "status": "ACTIVE",
+      "timestamp": "2026-11-10T19:48:16.487Z",
+      "priority": "NORMAL"
+    }
+  ],
+  "aiAudits": [
+    {
+      "id": "ai-audit-1794340109522",
+      "timestamp": "2026-11-10T19:48:29.522Z",
+      "operator": "admin",
+      "focus": "Full Lattice & Cosmic Telemetry Assessment",
+      "divergenceScore": 0.0176,
+      "status": "OPTIMAL",
+      "summary": "Kinetic audit evaluated 3 active dockets across 1 lattice nodes. Divergence score remains within acceptable operational tolerances.",
+      "recommendations": [
+        "Rule 1: Maintain the Lattice — verify Termux mobile endpoints every 6 hours",
+        "Rule 2: Clear Bottlenecks — resolve outstanding validation dockets",
+        "Rule 3: No Narrative Bleed — preserve cryptographic tokens without state leakage"
+      ],
+      "mitigationProtocol": "observx-kinetic-audit --verify-symmetry --enforce-rules"
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "log-1794340109522",
+      "timestamp": "2026-11-10T19:48:29.522Z",
+      "operator": "admin",
+      "action": "AI_AUDIT_COMPLETED",
+      "details": "Status: OPTIMAL (Divergence: 0.018)",
+      "severity": "INFO"
+    },
+    {
+      "id": "log-init",
+      "timestamp": "2026-11-10T19:48:16.487Z",
+      "operator": "system",
+      "action": "STORE_INIT",
+      "details": "ObservX persistent data store initialized with baseline telemetry.",
+      "severity": "INFO"
+    }
+  ],
+  "systemMetrics": {
+    "latticeSymmetry": "PERFECT",
+    "divergenceScore": 0.0176,
+    "vesselAero": "ACTIVE_SECURED",
+    "protocolVersion": "2.5.0-KINETIC",
+    "lastAuditTimestamp": "2026-11-10T19:48:29.522Z"
+  }
+}

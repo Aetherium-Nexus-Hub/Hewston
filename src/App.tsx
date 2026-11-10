@@ -570,158 +570,120 @@ export default function App() {
               <div className="rounded-2xl border bg-[#0A0A1F]/40 backdrop-blur-sm p-6 border-primary/20 shadow-[0_4px_20px_rgba(0,0,0,0.4)] relative overflow-hidden group mb-6">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-3xl pointer-events-none group-hover:bg-primary/10 transition-colors" />
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-[10px] font-bold uppercase tracking-[0.25em] text-primary flex items-center gap-2">
-                    {user ? (
-                      showProfile ? (
-                        <>
-                          <Settings className="w-4 h-4 text-primary animate-spin" /> NODE PROFILE CONFIGURATION &mdash; {user.username.toUpperCase()}
-                        </>
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.h3
+                      key={user ? (showProfile ? "profile-header" : "ledger-header") : authMode}
+                      initial={{ opacity: 0, y: -4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 4 }}
+                      transition={{ duration: 0.2, ease: "easeInOut" }}
+                      className="text-[10px] font-bold uppercase tracking-[0.25em] text-primary flex items-center gap-2"
+                    >
+                      {user ? (
+                        showProfile ? (
+                          <>
+                            <Settings className="w-4 h-4 text-primary animate-spin" /> NODE PROFILE CONFIGURATION &mdash; {user.username.toUpperCase()}
+                          </>
+                        ) : (
+                          <>
+                            <ShieldCheck className="w-4 h-4 text-primary animate-pulse" /> SECURED TELEMETRY LINK &mdash; {user.username.toUpperCase()}
+                          </>
+                        )
                       ) : (
-                        <>
-                          <ShieldCheck className="w-4 h-4 text-primary animate-pulse" /> SECURED TELEMETRY LINK &mdash; {user.username.toUpperCase()}
-                        </>
-                      )
-                    ) : (
-                      authMode === "forgot" ? (
-                        <>
-                          <HelpCircle className="w-4 h-4 text-yellow-500 animate-pulse" /> IDENTITY RECOVERY PROTOCOL
-                        </>
-                      ) : (
-                        <>
-                          <Lock className="w-4 h-4 text-yellow-500 animate-pulse" /> TELEMETRY INTERCEPT (ATTESTATION REQUIRED)
-                        </>
-                      )
-                    )}
-                  </h3>
+                        authMode === "forgot" ? (
+                          <>
+                            <HelpCircle className="w-4 h-4 text-yellow-500 animate-pulse" /> IDENTITY RECOVERY PROTOCOL
+                          </>
+                        ) : (
+                          <>
+                            <Lock className="w-4 h-4 text-yellow-500 animate-pulse" /> TELEMETRY INTERCEPT (ATTESTATION REQUIRED)
+                          </>
+                        )
+                      )}
+                    </motion.h3>
+                  </AnimatePresence>
                 </div>
 
-                {!user ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                    <div className="space-y-4">
-                      {authMode === "forgot" ? (
-                        <div className="p-4 rounded-lg bg-yellow-500/5 border border-yellow-500/15 text-xs font-mono space-y-3">
-                          <div className="text-yellow-500 font-bold flex items-center gap-2">
-                            <Key className="w-4 h-4" /> CRYPTO_KEY_MUTATION
+                <AnimatePresence mode="wait" initial={false}>
+                  {!user ? (
+                    <motion.div
+                      key={authMode}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
+                      className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center"
+                    >
+                      <div className="space-y-4">
+                        {authMode === "forgot" ? (
+                          <div className="p-4 rounded-lg bg-yellow-500/5 border border-yellow-500/15 text-xs font-mono space-y-3">
+                            <div className="text-yellow-500 font-bold flex items-center gap-2">
+                              <Key className="w-4 h-4" /> CRYPTO_KEY_MUTATION
+                            </div>
+                            <p className="text-muted-foreground leading-relaxed text-[11px]">
+                              Initiating out-of-band security answer validation. Providing the correct registered cryptographic answer will permit changing node access credentials instantly.
+                            </p>
+                            <div className="pt-2 border-t border-white/5 text-[10px] text-muted-foreground leading-tight">
+                              <span className="text-accent font-semibold uppercase">Failsafe Alert:</span> If answer keys are lost, please contact standard system administration or provision a fresh identity block.
+                            </div>
                           </div>
-                          <p className="text-muted-foreground leading-relaxed text-[11px]">
-                            Initiating out-of-band security answer validation. Providing the correct registered cryptographic answer will permit changing node access credentials instantly.
-                          </p>
-                          <div className="pt-2 border-t border-white/5 text-[10px] text-muted-foreground leading-tight">
-                            <span className="text-accent font-semibold uppercase">Failsafe Alert:</span> If answer keys are lost, please contact standard system administration or provision a fresh identity block.
+                        ) : (
+                          <div className="p-4 rounded-lg bg-yellow-500/5 border border-yellow-500/15 text-xs font-mono space-y-3">
+                            <div className="text-yellow-500 font-bold flex items-center gap-2">
+                              <AlertCircle className="w-4 h-4" /> ACCESS_DENIED_SECURE_CHANNEL
+                            </div>
+                            <p className="text-muted-foreground leading-relaxed text-[11px]">
+                              This endpoint requires custom verified JSON Web Token (JWT) credentials. Secure routing filters are currently safeguarding unauthenticated telemetry queries.
+                            </p>
+                            <div className="pt-2 border-t border-white/5 text-[10px] text-muted-foreground leading-tight">
+                              <span className="text-accent font-semibold uppercase">Audit Hint:</span> Input standard credentials username <strong className="text-white font-mono font-bold">admin</strong> and password <strong className="text-white font-mono font-bold">admin123</strong>, or register a new identity credentials instantly.
+                            </div>
                           </div>
-                        </div>
-                      ) : (
-                        <div className="p-4 rounded-lg bg-yellow-500/5 border border-yellow-500/15 text-xs font-mono space-y-3">
-                          <div className="text-yellow-500 font-bold flex items-center gap-2">
-                            <AlertCircle className="w-4 h-4" /> ACCESS_DENIED_SECURE_CHANNEL
-                          </div>
-                          <p className="text-muted-foreground leading-relaxed text-[11px]">
-                            This endpoint requires custom verified JSON Web Token (JWT) credentials. Secure routing filters are currently safeguarding unauthenticated telemetry queries.
-                          </p>
-                          <div className="pt-2 border-t border-white/5 text-[10px] text-muted-foreground leading-tight">
-                            <span className="text-accent font-semibold uppercase">Audit Hint:</span> Input standard credentials username <strong className="text-white font-mono font-bold">admin</strong> and password <strong className="text-white font-mono font-bold">admin123</strong>, or register a new identity credentials instantly.
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="bg-[#050510]/80 rounded-lg border border-border/50 p-5 shadow-inner">
-                      <div className="flex gap-4 mb-4 border-b border-white/5 pb-2 justify-between items-center">
-                        <div className="flex gap-4">
-                          <button
-                            type="button"
-                            onClick={() => { setAuthMode("login"); setAuthError(null); setAuthSuccess(null); }}
-                            className={`text-xs uppercase font-extrabold tracking-wider pb-1 transition-all cursor-pointer ${authMode === "login" ? "text-primary border-b border-primary" : "text-muted-foreground hover:text-white"}`}
-                          >
-                            Sign In
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => { setAuthMode("register"); setAuthError(null); setAuthSuccess(null); }}
-                            className={`text-xs uppercase font-extrabold tracking-wider pb-1 transition-all cursor-pointer ${authMode === "register" ? "text-primary border-b border-primary" : "text-muted-foreground hover:text-white"}`}
-                          >
-                            Register Node
-                          </button>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => { setAuthMode("forgot"); setAuthError(null); setAuthSuccess(null); setRecoveryStep(1); }}
-                          className={`text-[10px] uppercase font-bold tracking-wider pb-1 transition-all cursor-pointer ${authMode === "forgot" ? "text-yellow-500 border-b border-yellow-500" : "text-muted-foreground hover:text-white"}`}
-                        >
-                          Recover Key
-                        </button>
+                        )}
                       </div>
 
-                      {authMode === "login" && (
-                        <form onSubmit={handleAuthSubmit} className="space-y-3">
-                          <div>
-                            <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Username</label>
-                            <input
-                              type="text"
-                              value={authUsername}
-                              onChange={(e) => setAuthUsername(e.target.value)}
-                              placeholder="e.g. admin"
-                              className="w-full bg-background/50 border border-border/50 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
-                              required
-                            />
+                      <div className="bg-[#050510]/80 rounded-lg border border-border/50 p-5 shadow-inner">
+                        <div className="flex gap-4 mb-4 border-b border-white/5 pb-2 justify-between items-center">
+                          <div className="flex gap-4">
+                            <button
+                              type="button"
+                              onClick={() => { setAuthMode("login"); setAuthError(null); setAuthSuccess(null); }}
+                              className={`text-xs uppercase font-extrabold tracking-wider pb-1 transition-all cursor-pointer ${authMode === "login" ? "text-primary border-b border-primary" : "text-muted-foreground hover:text-white"}`}
+                            >
+                              Sign In
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => { setAuthMode("register"); setAuthError(null); setAuthSuccess(null); }}
+                              className={`text-xs uppercase font-extrabold tracking-wider pb-1 transition-all cursor-pointer ${authMode === "register" ? "text-primary border-b border-primary" : "text-muted-foreground hover:text-white"}`}
+                            >
+                              Register Node
+                            </button>
                           </div>
-                          <div>
-                            <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Password</label>
-                            <input
-                              type="password"
-                              value={authPassword}
-                              onChange={(e) => setAuthPassword(e.target.value)}
-                              placeholder="••••••••"
-                              className="w-full bg-background/50 border border-border/50 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
-                              required
-                            />
-                          </div>
-
-                          {authError && (
-                            <div className="text-[10px] text-red-400 font-semibold bg-red-400/5 px-2 py-1.5 rounded-md border border-red-400/10 flex items-center gap-1.5 font-mono">
-                              <AlertCircle className="w-3.5 h-3.5 animate-pulse" />
-                              <span>{authError}</span>
-                            </div>
-                          )}
-
-                          {authSuccess && (
-                            <div className="text-[10px] text-[#10b981] font-semibold bg-[#10b981]/5 px-2 py-1.5 rounded-md border border-[#10b981]/10 flex items-center gap-1.5 font-mono">
-                              <CheckCircle2 className="w-3.5 h-3.5" />
-                              <span>{authSuccess}</span>
-                            </div>
-                          )}
-
                           <button
-                            type="submit"
-                            disabled={authLoading}
-                            className="w-full bg-primary hover:bg-primary/80 disabled:opacity-50 text-primary-foreground py-2 px-3 rounded text-xs font-bold transition-all uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-[0_0_15px_rgba(139,92,246,0.2)] cursor-pointer"
+                            type="button"
+                            onClick={() => { setAuthMode("forgot"); setAuthError(null); setAuthSuccess(null); setRecoveryStep(1); }}
+                            className={`text-[10px] uppercase font-bold tracking-wider pb-1 transition-all cursor-pointer ${authMode === "forgot" ? "text-yellow-500 border-b border-yellow-500" : "text-muted-foreground hover:text-white"}`}
                           >
-                            {authLoading ? (
-                              <RefreshCw className="w-3 h-3 animate-spin" />
-                            ) : (
-                              <Unlock className="w-3" />
-                            )}
-                            <span>Attest Credentials</span>
+                            Recover Key
                           </button>
-                        </form>
-                      )}
+                        </div>
 
-                      {authMode === "register" && (
-                        <form onSubmit={handleAuthSubmit} className="space-y-3">
-                          <div className="grid grid-cols-2 gap-3">
+                        {authMode === "login" && (
+                          <form onSubmit={handleAuthSubmit} className="space-y-3">
                             <div>
                               <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Username</label>
                               <input
                                 type="text"
                                 value={authUsername}
                                 onChange={(e) => setAuthUsername(e.target.value)}
-                                placeholder="e.g. pilot"
+                                placeholder="e.g. admin"
                                 className="w-full bg-background/50 border border-border/50 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
                                 required
                               />
                             </div>
                             <div>
-                              <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Password (6+ chars)</label>
+                              <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Password</label>
                               <input
                                 type="password"
                                 value={authPassword}
@@ -731,48 +693,339 @@ export default function App() {
                                 required
                               />
                             </div>
+
+                            {authError && (
+                              <div className="text-[10px] text-red-400 font-semibold bg-red-400/5 px-2 py-1.5 rounded-md border border-red-400/10 flex items-center gap-1.5 font-mono">
+                                <AlertCircle className="w-3.5 h-3.5 animate-pulse" />
+                                <span>{authError}</span>
+                              </div>
+                            )}
+
+                            {authSuccess && (
+                              <div className="text-[10px] text-[#10b981] font-semibold bg-[#10b981]/5 px-2 py-1.5 rounded-md border border-[#10b981]/10 flex items-center gap-1.5 font-mono">
+                                <CheckCircle2 className="w-3.5 h-3.5" />
+                                <span>{authSuccess}</span>
+                              </div>
+                            )}
+
+                            <button
+                              type="submit"
+                              disabled={authLoading}
+                              className="w-full bg-primary hover:bg-primary/80 disabled:opacity-50 text-primary-foreground py-2 px-3 rounded text-xs font-bold transition-all uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-[0_0_15px_rgba(139,92,246,0.2)] cursor-pointer"
+                            >
+                              {authLoading ? (
+                                <RefreshCw className="w-3 h-3 animate-spin" />
+                              ) : (
+                                <Unlock className="w-3" />
+                              )}
+                              <span>Attest Credentials</span>
+                            </button>
+                          </form>
+                        )}
+
+                        {authMode === "register" && (
+                          <form onSubmit={handleAuthSubmit} className="space-y-3">
+                            <div className="grid grid-cols-2 gap-3">
+                              <div>
+                                <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Username</label>
+                                <input
+                                  type="text"
+                                  value={authUsername}
+                                  onChange={(e) => setAuthUsername(e.target.value)}
+                                  placeholder="e.g. pilot"
+                                  className="w-full bg-background/50 border border-border/50 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
+                                  required
+                                />
+                              </div>
+                              <div>
+                                <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Password (6+ chars)</label>
+                                <input
+                                  type="password"
+                                  value={authPassword}
+                                  onChange={(e) => setAuthPassword(e.target.value)}
+                                  placeholder="••••••••"
+                                  className="w-full bg-background/50 border border-border/50 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
+                                  required
+                                />
+                              </div>
+                            </div>
+
+                            <div>
+                              <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Email Connection</label>
+                              <input
+                                type="email"
+                                value={authEmail}
+                                onChange={(e) => setAuthEmail(e.target.value)}
+                                placeholder="e.g. team@observx.io"
+                                className="w-full bg-background/50 border border-border/50 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
+                                required
+                              />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3">
+                              <div>
+                                <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Grid Role</label>
+                                <input
+                                  type="text"
+                                  value={authNodeRole}
+                                  onChange={(e) => setAuthNodeRole(e.target.value)}
+                                  placeholder="e.g. Auditor"
+                                  className="w-full bg-background/50 border border-border/50 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
+                                />
+                              </div>
+                              <div>
+                                <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Node Location</label>
+                                <input
+                                  type="text"
+                                  value={authNodeLoc}
+                                  onChange={(e) => setAuthNodeLoc(e.target.value)}
+                                  placeholder="e.g. Orbit-3"
+                                  className="w-full bg-background/50 border border-border/50 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
+                                />
+                              </div>
+                            </div>
+
+                            <div>
+                              <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Recovery Security Question</label>
+                              <select
+                                value={authSecurityQuestion}
+                                onChange={(e) => setAuthSecurityQuestion(e.target.value)}
+                                className="w-full bg-background/50 border border-border/50 rounded px-2 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
+                              >
+                                <option value="What is your first terminal?">What is your first terminal?</option>
+                                <option value="What is the name of your first spacecraft?">What is the name of your first spacecraft?</option>
+                                <option value="What is your secret kinetic keycode?">What is your secret kinetic keycode?</option>
+                                <option value="What is your favorite Linux flavor?">What is your favorite Linux flavor?</option>
+                              </select>
+                            </div>
+
+                            <div>
+                              <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Challenge Answer Answer</label>
+                              <input
+                                type="text"
+                                value={authSecurityAnswer}
+                                onChange={(e) => setAuthSecurityAnswer(e.target.value)}
+                                placeholder="Case-insensitive recovery"
+                                className="w-full bg-background/50 border border-border/50 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
+                                required
+                              />
+                            </div>
+
+                            {authError && (
+                              <div className="text-[10px] text-red-400 font-semibold bg-red-400/5 px-2 py-1.5 rounded-md border border-red-400/10 flex items-center gap-1.5 font-mono">
+                                <AlertCircle className="w-3.5 h-3.5 animate-pulse" />
+                                <span>{authError}</span>
+                              </div>
+                            )}
+
+                            {authSuccess && (
+                              <div className="text-[10px] text-[#10b981] font-semibold bg-[#10b981]/5 px-2 py-1.5 rounded-md border border-[#10b981]/10 flex items-center gap-1.5 font-mono">
+                                <CheckCircle2 className="w-3.5 h-3.5" />
+                                <span>{authSuccess}</span>
+                              </div>
+                            )}
+
+                            <button
+                              type="submit"
+                              disabled={authLoading}
+                              className="w-full bg-primary hover:bg-primary/80 disabled:opacity-50 text-primary-foreground py-2 px-3 rounded text-xs font-bold transition-all uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-[0_0_15px_rgba(139,92,246,0.2)] cursor-pointer"
+                            >
+                              {authLoading ? (
+                                <RefreshCw className="w-3 h-3 animate-spin" />
+                              ) : (
+                                <Rocket className="w-3" />
+                              )}
+                              <span>Register Node Configuration</span>
+                            </button>
+                          </form>
+                        )}
+
+                        {authMode === "forgot" && (
+                          <div>
+                            {recoveryStep === 1 ? (
+                              <form onSubmit={handleRecoveryQuery} className="space-y-3">
+                                <p className="text-[10px] text-muted-foreground leading-normal mb-2 font-mono">
+                                  Enter your registered node username to fetch the cryptographic verification challenge.
+                                </p>
+                                <div>
+                                  <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Username</label>
+                                  <input
+                                    type="text"
+                                    value={recoveryUsername}
+                                    onChange={(e) => setRecoveryUsername(e.target.value)}
+                                    placeholder="e.g. admin"
+                                    className="w-full bg-background/50 border border-border/50 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
+                                    required
+                                  />
+                                </div>
+
+                                {authError && (
+                                  <div className="text-[10px] text-red-400 font-semibold bg-red-400/5 px-2 py-1.5 rounded-md border border-red-400/10 flex items-center gap-1.5 font-mono">
+                                    <AlertCircle className="w-3.5 h-3.5" />
+                                    <span>{authError}</span>
+                                  </div>
+                                )}
+
+                                <button
+                                  type="submit"
+                                  disabled={authLoading}
+                                  className="w-full bg-yellow-500/10 hover:bg-yellow-500/20 border border-yellow-500/20 text-yellow-500 py-2 px-3 rounded text-xs font-bold transition-all uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer font-mono"
+                                >
+                                  {authLoading ? (
+                                    <RefreshCw className="w-3 h-3 animate-spin" />
+                                  ) : (
+                                    <HelpCircle className="w-3.5 h-3.5 text-yellow-500" />
+                                  )}
+                                  <span>Get Verification Challenge</span>
+                                </button>
+                              </form>
+                            ) : (
+                              <form onSubmit={handleRecoverySubmit} className="space-y-3">
+                                <div className="p-3 bg-yellow-500/5 border border-yellow-500/20 rounded font-mono text-[11px] space-y-1">
+                                  <span className="text-[9px] font-bold text-yellow-500 block uppercase tracking-wide">Verification Challenge:</span>
+                                  <span className="text-foreground font-semibold">{recoveryQuestion}</span>
+                                </div>
+
+                                <div>
+                                  <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Challenge Answer Code</label>
+                                  <input
+                                    type="text"
+                                    value={recoveryAnswer}
+                                    onChange={(e) => setRecoveryAnswer(e.target.value)}
+                                    placeholder="Verify challenge response"
+                                    className="w-full bg-background/50 border border-border/50 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
+                                    required
+                                  />
+                                </div>
+
+                                <div>
+                                  <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">New Access Password</label>
+                                  <input
+                                    type="password"
+                                    value={recoveryNewPassword}
+                                    onChange={(e) => setRecoveryNewPassword(e.target.value)}
+                                    placeholder="••••••••"
+                                    className="w-full bg-background/50 border border-border/50 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
+                                    required
+                                  />
+                                </div>
+
+                                {authError && (
+                                  <div className="text-[10px] text-red-400 font-semibold bg-red-400/5 px-2 py-1.5 rounded-md border border-red-400/10 flex items-center gap-1.5 font-mono">
+                                    <AlertCircle className="w-3.5 h-3.5" />
+                                    <span>{authError}</span>
+                                  </div>
+                                )}
+
+                                {authSuccess && (
+                                  <div className="text-[10px] text-[#10b981] font-semibold bg-[#10b981]/5 px-2 py-1.5 rounded-md border border-[#10b981]/10 flex items-center gap-1.5 font-mono">
+                                    <CheckCircle2 className="w-3.5 h-3.5" />
+                                    <span>{authSuccess}</span>
+                                  </div>
+                                )}
+
+                                <div className="flex gap-2 font-mono">
+                                  <button
+                                    type="button"
+                                    onClick={() => setRecoveryStep(1)}
+                                    className="w-1/3 border border-border hover:bg-white/5 py-1.5 px-3 rounded text-[11px] font-bold uppercase text-muted-foreground transition-all cursor-pointer"
+                                  >
+                                    Back
+                                  </button>
+                                  <button
+                                    type="submit"
+                                    disabled={authLoading}
+                                    className="w-2/3 bg-[#10b981] hover:bg-[#10b981]/80 text-white rounded text-[11px] font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+                                  >
+                                    {authLoading ? (
+                                      <RefreshCw className="w-3 h-3 animate-spin" />
+                                    ) : (
+                                      <Check className="w-3.5 h-3.5" />
+                                    )}
+                                    <span>Re-attest identity</span>
+                                  </button>
+                                </div>
+                              </form>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+                  ) : showProfile ? (
+                    <motion.div
+                      key="node-profile"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                      className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start font-sans"
+                    >
+                      {/* Left Column: Properties Setup */}
+                      <div className="bg-[#050510]/80 rounded-lg border border-border/50 p-5 shadow-inner">
+                        <div className="text-primary/80 mb-4 border-b border-white/5 pb-2 uppercase tracking-wide text-xs font-bold flex justify-between items-center">
+                          <span className="flex items-center gap-1.5"><User className="w-4 h-4 text-primary" /> Profile Parameters</span>
+                          {profile?.createdAt && (
+                            <span className="text-[10px] text-muted-foreground font-mono font-normal">Active since {new Date(profile.createdAt).toLocaleDateString()}</span>
+                          )}
+                        </div>
+
+                        <form onSubmit={handleUpdateProfile} className="space-y-3">
+                          <div>
+                            <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Username (Immutable)</label>
+                            <input
+                              type="text"
+                              value={profile?.username || user?.username || ""}
+                              className="w-full bg-white/5 border border-white/5 select-all rounded px-2.5 py-1.5 text-xs text-muted-foreground font-mono"
+                              disabled
+                            />
                           </div>
 
                           <div>
-                            <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Email Connection</label>
-                            <input
-                              type="email"
-                              value={authEmail}
-                              onChange={(e) => setAuthEmail(e.target.value)}
-                              placeholder="e.g. team@observx.io"
-                              className="w-full bg-background/50 border border-border/50 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
-                              required
-                            />
+                            <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Email Address</label>
+                            <div className="relative">
+                              <Mail className="w-3.5 h-3.5 text-muted-foreground absolute left-3 top-2.5" />
+                              <input
+                                type="email"
+                                value={editEmail}
+                                onChange={(e) => setEditEmail(e.target.value)}
+                                placeholder="e.g. pilot@observx.io"
+                                className="w-full bg-background/50 border border-border/50 rounded pl-9 pr-3 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
+                                required
+                              />
+                            </div>
                           </div>
 
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Grid Role</label>
+                              <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Grid Operational Role</label>
                               <input
                                 type="text"
-                                value={authNodeRole}
-                                onChange={(e) => setAuthNodeRole(e.target.value)}
-                                placeholder="e.g. Auditor"
+                                value={editNodeRole}
+                                onChange={(e) => setEditNodeRole(e.target.value)}
+                                placeholder="e.g. Chief Auditor"
                                 className="w-full bg-background/50 border border-border/50 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
                               />
                             </div>
                             <div>
-                              <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Node Location</label>
-                              <input
-                                type="text"
-                                value={authNodeLoc}
-                                onChange={(e) => setAuthNodeLoc(e.target.value)}
-                                placeholder="e.g. Orbit-3"
-                                className="w-full bg-background/50 border border-border/50 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
-                              />
+                              <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Station Location</label>
+                              <div className="relative">
+                                <MapPin className="w-3 h-3 text-muted-foreground absolute left-2.5 top-2.5" />
+                                <input
+                                  type="text"
+                                  value={editNodeLoc}
+                                  onChange={(e) => setEditNodeLoc(e.target.value)}
+                                  placeholder="e.g. Station Delta"
+                                  className="w-full bg-background/50 border border-border/50 rounded pl-7 pr-3 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
+                                />
+                              </div>
                             </div>
                           </div>
 
-                          <div>
-                            <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Recovery Security Question</label>
+                          <div className="pt-2 border-t border-white/5">
+                            <label className="text-[9px] uppercase font-bold text-yellow-500/80 block mb-1">Change Security recovery Question</label>
                             <select
-                              value={authSecurityQuestion}
-                              onChange={(e) => setAuthSecurityQuestion(e.target.value)}
+                              value={editSecurityQuestion}
+                              onChange={(e) => setEditSecurityQuestion(e.target.value)}
                               className="w-full bg-background/50 border border-border/50 rounded px-2 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
                             >
                               <option value="What is your first terminal?">What is your first terminal?</option>
@@ -783,581 +1036,360 @@ export default function App() {
                           </div>
 
                           <div>
-                            <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Challenge Answer Answer</label>
+                            <label className="text-[9px] uppercase font-bold text-yellow-500/80 block mb-1">Optional Answers Key (Write answer to change)</label>
                             <input
                               type="text"
-                              value={authSecurityAnswer}
-                              onChange={(e) => setAuthSecurityAnswer(e.target.value)}
-                              placeholder="Case-insensitive recovery"
+                              value={editSecurityAnswer}
+                              onChange={(e) => setEditSecurityAnswer(e.target.value)}
+                              placeholder="Type new security answer to commit question swap"
                               className="w-full bg-background/50 border border-border/50 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
-                              required
                             />
                           </div>
 
-                          {authError && (
+                          {profileError && (
                             <div className="text-[10px] text-red-400 font-semibold bg-red-400/5 px-2 py-1.5 rounded-md border border-red-400/10 flex items-center gap-1.5 font-mono">
-                              <AlertCircle className="w-3.5 h-3.5 animate-pulse" />
-                              <span>{authError}</span>
+                              <AlertCircle className="w-3.5 h-3.5" />
+                              <span>{profileError}</span>
                             </div>
                           )}
 
-                          {authSuccess && (
+                          {profileSuccess && (
                             <div className="text-[10px] text-[#10b981] font-semibold bg-[#10b981]/5 px-2 py-1.5 rounded-md border border-[#10b981]/10 flex items-center gap-1.5 font-mono">
                               <CheckCircle2 className="w-3.5 h-3.5" />
-                              <span>{authSuccess}</span>
+                              <span>{profileSuccess}</span>
                             </div>
                           )}
-
-                          <button
-                            type="submit"
-                            disabled={authLoading}
-                            className="w-full bg-primary hover:bg-primary/80 disabled:opacity-50 text-primary-foreground py-2 px-3 rounded text-xs font-bold transition-all uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-[0_0_15px_rgba(139,92,246,0.2)] cursor-pointer"
-                          >
-                            {authLoading ? (
-                              <RefreshCw className="w-3 h-3 animate-spin" />
-                            ) : (
-                              <Rocket className="w-3" />
-                            )}
-                            <span>Register Node Configuration</span>
-                          </button>
-                        </form>
-                      )}
-
-                      {authMode === "forgot" && (
-                        <div>
-                          {recoveryStep === 1 ? (
-                            <form onSubmit={handleRecoveryQuery} className="space-y-3">
-                              <p className="text-[10px] text-muted-foreground leading-normal mb-2 font-mono">
-                                Enter your registered node username to fetch the cryptographic verification challenge.
-                              </p>
-                              <div>
-                                <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Username</label>
-                                <input
-                                  type="text"
-                                  value={recoveryUsername}
-                                  onChange={(e) => setRecoveryUsername(e.target.value)}
-                                  placeholder="e.g. admin"
-                                  className="w-full bg-background/50 border border-border/50 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
-                                  required
-                                />
-                              </div>
-
-                              {authError && (
-                                <div className="text-[10px] text-red-400 font-semibold bg-red-400/5 px-2 py-1.5 rounded-md border border-red-400/10 flex items-center gap-1.5 font-mono">
-                                  <AlertCircle className="w-3.5 h-3.5" />
-                                  <span>{authError}</span>
-                                </div>
-                              )}
-
-                              <button
-                                type="submit"
-                                disabled={authLoading}
-                                className="w-full bg-yellow-500/10 hover:bg-yellow-500/20 border border-yellow-500/20 text-yellow-500 py-2 px-3 rounded text-xs font-bold transition-all uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer font-mono"
-                              >
-                                {authLoading ? (
-                                  <RefreshCw className="w-3 h-3 animate-spin" />
-                                ) : (
-                                  <HelpCircle className="w-3.5 h-3.5 text-yellow-500" />
-                                )}
-                                <span>Get Verification Challenge</span>
-                              </button>
-                            </form>
-                          ) : (
-                            <form onSubmit={handleRecoverySubmit} className="space-y-3">
-                              <div className="p-3 bg-yellow-500/5 border border-yellow-500/20 rounded font-mono text-[11px] space-y-1">
-                                <span className="text-[9px] font-bold text-yellow-500 block uppercase tracking-wide">Verification Challenge:</span>
-                                <span className="text-foreground font-semibold">{recoveryQuestion}</span>
-                              </div>
-
-                              <div>
-                                <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Challenge Answer Code</label>
-                                <input
-                                  type="text"
-                                  value={recoveryAnswer}
-                                  onChange={(e) => setRecoveryAnswer(e.target.value)}
-                                  placeholder="Verify challenge response"
-                                  className="w-full bg-background/50 border border-border/50 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
-                                  required
-                                />
-                              </div>
-
-                              <div>
-                                <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">New Access Password</label>
-                                <input
-                                  type="password"
-                                  value={recoveryNewPassword}
-                                  onChange={(e) => setRecoveryNewPassword(e.target.value)}
-                                  placeholder="••••••••"
-                                  className="w-full bg-background/50 border border-border/50 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
-                                  required
-                                />
-                              </div>
-
-                              {authError && (
-                                <div className="text-[10px] text-red-400 font-semibold bg-red-400/5 px-2 py-1.5 rounded-md border border-red-400/10 flex items-center gap-1.5 font-mono">
-                                  <AlertCircle className="w-3.5 h-3.5" />
-                                  <span>{authError}</span>
-                                </div>
-                              )}
-
-                              {authSuccess && (
-                                <div className="text-[10px] text-[#10b981] font-semibold bg-[#10b981]/5 px-2 py-1.5 rounded-md border border-[#10b981]/10 flex items-center gap-1.5 font-mono">
-                                  <CheckCircle2 className="w-3.5 h-3.5" />
-                                  <span>{authSuccess}</span>
-                                </div>
-                              )}
-
-                              <div className="flex gap-2 font-mono">
-                                <button
-                                  type="button"
-                                  onClick={() => setRecoveryStep(1)}
-                                  className="w-1/3 border border-border hover:bg-white/5 py-1.5 px-3 rounded text-[11px] font-bold uppercase text-muted-foreground transition-all cursor-pointer"
-                                >
-                                  Back
-                                </button>
-                                <button
-                                  type="submit"
-                                  disabled={authLoading}
-                                  className="w-2/3 bg-[#10b981] hover:bg-[#10b981]/80 text-white rounded text-[11px] font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.2)]"
-                                >
-                                  {authLoading ? (
-                                    <RefreshCw className="w-3 h-3 animate-spin" />
-                                  ) : (
-                                    <Check className="w-3.5 h-3.5" />
-                                  )}
-                                  <span>Re-attest identity</span>
-                                </button>
-                              </div>
-                            </form>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ) : showProfile ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start font-sans">
-                    {/* Left Column: Properties Setup */}
-                    <div className="bg-[#050510]/80 rounded-lg border border-border/50 p-5 shadow-inner">
-                      <div className="text-primary/80 mb-4 border-b border-white/5 pb-2 uppercase tracking-wide text-xs font-bold flex justify-between items-center">
-                        <span className="flex items-center gap-1.5"><User className="w-4 h-4 text-primary" /> Profile Parameters</span>
-                        {profile?.createdAt && (
-                          <span className="text-[10px] text-muted-foreground font-mono font-normal">Active since {new Date(profile.createdAt).toLocaleDateString()}</span>
-                        )}
-                      </div>
-
-                      <form onSubmit={handleUpdateProfile} className="space-y-3">
-                        <div>
-                          <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Username (Immutable)</label>
-                          <input
-                            type="text"
-                            value={profile?.username || user?.username || ""}
-                            className="w-full bg-white/5 border border-white/5 select-all rounded px-2.5 py-1.5 text-xs text-muted-foreground font-mono"
-                            disabled
-                          />
-                        </div>
-
-                        <div>
-                          <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Email Address</label>
-                          <div className="relative">
-                            <Mail className="w-3.5 h-3.5 text-muted-foreground absolute left-3 top-2.5" />
-                            <input
-                              type="email"
-                              value={editEmail}
-                              onChange={(e) => setEditEmail(e.target.value)}
-                              placeholder="e.g. pilot@observx.io"
-                              className="w-full bg-background/50 border border-border/50 rounded pl-9 pr-3 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
-                              required
-                            />
-                          </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-3">
-                          <div>
-                            <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Grid Operational Role</label>
-                            <input
-                              type="text"
-                              value={editNodeRole}
-                              onChange={(e) => setEditNodeRole(e.target.value)}
-                              placeholder="e.g. Chief Auditor"
-                              className="w-full bg-background/50 border border-border/50 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
-                            />
-                          </div>
-                          <div>
-                            <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Station Location</label>
-                            <div className="relative">
-                              <MapPin className="w-3 h-3 text-muted-foreground absolute left-2.5 top-2.5" />
-                              <input
-                                type="text"
-                                value={editNodeLoc}
-                                onChange={(e) => setEditNodeLoc(e.target.value)}
-                                placeholder="e.g. Station Delta"
-                                className="w-full bg-background/50 border border-border/50 rounded pl-7 pr-3 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
-                              />
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="pt-2 border-t border-white/5">
-                          <label className="text-[9px] uppercase font-bold text-yellow-500/80 block mb-1">Change Security recovery Question</label>
-                          <select
-                            value={editSecurityQuestion}
-                            onChange={(e) => setEditSecurityQuestion(e.target.value)}
-                            className="w-full bg-background/50 border border-border/50 rounded px-2 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
-                          >
-                            <option value="What is your first terminal?">What is your first terminal?</option>
-                            <option value="What is the name of your first spacecraft?">What is the name of your first spacecraft?</option>
-                            <option value="What is your secret kinetic keycode?">What is your secret kinetic keycode?</option>
-                            <option value="What is your favorite Linux flavor?">What is your favorite Linux flavor?</option>
-                          </select>
-                        </div>
-
-                        <div>
-                          <label className="text-[9px] uppercase font-bold text-yellow-500/80 block mb-1">Optional Answers Key (Write answer to change)</label>
-                          <input
-                            type="text"
-                            value={editSecurityAnswer}
-                            onChange={(e) => setEditSecurityAnswer(e.target.value)}
-                            placeholder="Type new security answer to commit question swap"
-                            className="w-full bg-background/50 border border-border/50 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
-                          />
-                        </div>
-
-                        {profileError && (
-                          <div className="text-[10px] text-red-400 font-semibold bg-red-400/5 px-2 py-1.5 rounded-md border border-red-400/10 flex items-center gap-1.5 font-mono">
-                            <AlertCircle className="w-3.5 h-3.5" />
-                            <span>{profileError}</span>
-                          </div>
-                        )}
-
-                        {profileSuccess && (
-                          <div className="text-[10px] text-[#10b981] font-semibold bg-[#10b981]/5 px-2 py-1.5 rounded-md border border-[#10b981]/10 flex items-center gap-1.5 font-mono">
-                            <CheckCircle2 className="w-3.5 h-3.5" />
-                            <span>{profileSuccess}</span>
-                          </div>
-                        )}
-
-                        <button
-                          type="submit"
-                          disabled={profileLoading}
-                          className="w-full bg-primary hover:bg-primary/80 disabled:opacity-50 text-primary-foreground py-2 px-3 rounded text-xs font-bold transition-all uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer shadow-[0_0_12px_rgba(139,92,246,0.15)] animate-shimmer"
-                        >
-                          {profileLoading ? (
-                            <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                          ) : (
-                            <Check className="w-3.5 h-3.5" />
-                          )}
-                          <span>Save Node Parameters</span>
-                        </button>
-                      </form>
-                    </div>
-
-                    {/* Right Column: Credentials Rotation */}
-                    <div className="space-y-4">
-                      <div className="bg-[#050510]/80 rounded-lg border border-border/50 p-5 shadow-inner">
-                        <div className="text-primary/80 mb-4 border-b border-white/5 pb-2 uppercase tracking-wide text-xs font-bold flex items-center gap-1.5">
-                          <Key className="w-4 h-4 text-primary" /> Credentials Rotation
-                        </div>
-
-                        <form onSubmit={handleChangePassword} className="space-y-3">
-                          <div>
-                            <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Current Password</label>
-                            <input
-                              type="password"
-                              value={currentPassword}
-                              onChange={(e) => setCurrentPassword(e.target.value)}
-                              placeholder="••••••••"
-                              className="w-full bg-background/50 border border-border/50 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
-                              required
-                            />
-                          </div>
-
-                          <div>
-                            <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">New Access Password</label>
-                            <input
-                              type="password"
-                              value={newProfilePassword}
-                              onChange={(e) => setNewProfilePassword(e.target.value)}
-                              placeholder="••••••••"
-                              className="w-full bg-background/50 border border-border/50 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
-                              required
-                            />
-                          </div>
 
                           <button
                             type="submit"
                             disabled={profileLoading}
-                            className="w-full bg-[#10b981]/10 hover:bg-[#10b981]/20 border border-[#10b981]/20 text-[#10b981] py-2 px-3 rounded text-xs font-bold transition-all uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer"
+                            className="w-full bg-primary hover:bg-primary/80 disabled:opacity-50 text-primary-foreground py-2 px-3 rounded text-xs font-bold transition-all uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer shadow-[0_0_12px_rgba(139,92,246,0.15)] animate-shimmer"
                           >
                             {profileLoading ? (
                               <RefreshCw className="w-3.5 h-3.5 animate-spin" />
                             ) : (
-                              <RefreshCw className="w-3.5 h-3.5" />
+                              <Check className="w-3.5 h-3.5" />
                             )}
-                            <span>Rotate Access Key</span>
+                            <span>Save Node Parameters</span>
                           </button>
                         </form>
                       </div>
 
-                      <div className="p-4 bg-primary/5 border border-primary/10 rounded-lg text-xs leading-normal font-mono text-muted-foreground space-y-2">
-                        <span className="text-[10px] text-primary font-bold uppercase tracking-wider block">Signature Details</span>
-                        <div className="flex justify-between">
-                          <span>Connection:</span>
-                          <span className="text-foreground">Secure Node SSL</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>Email Status:</span>
-                          <span className="text-foreground">{profile?.email ? "Verified" : "Unconnected"}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>Identity Role:</span>
-                          <span className="text-foreground">{profile?.nodeRole || "Unassigned"}</span>
-                        </div>
-                        <button
-                          onClick={() => setShowProfile(false)}
-                          className="w-full text-center mt-2 pt-2 border-t border-white/5 text-[10px] text-primary hover:text-white transition-colors cursor-pointer block font-bold uppercase tracking-wider"
-                        >
-                          &larr; Return to telemetry stream
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-4">
-                      {telemetryLoading ? (
-                        <div className="bg-[#050510]/80 rounded-lg border border-border/50 p-6 min-h-[150px] flex items-center justify-center font-mono text-xs text-primary/60 italic gap-3">
-                          <RefreshCw className="w-4 h-4 animate-spin text-primary" />
-                          Fetching cryptographic secure packets...
-                        </div>
-                      ) : telemetryError ? (
-                        <div className="bg-[#050510]/80 rounded-lg border border-border/50 p-4 min-h-[150px] font-mono text-xs text-red-400 flex flex-col justify-center items-center gap-2">
-                          <AlertCircle className="w-6 h-6 text-red-500 animate-bounce" />
-                          <span>Telemetry Link Loss: {telemetryError}</span>
-                        </div>
-                      ) : telemetry ? (
-                        <>
-                          <div className="bg-[#050510]/80 rounded-lg border border-border/50 p-4 font-mono text-xs shadow-inner">
-                              <div className="text-accent/60 mb-2 border-b border-white/5 pb-1 uppercase tracking-tighter text-[9px] font-bold flex justify-between">
-                                  <span>Node Specifications</span>
-                                  <span className="text-[#10b981] font-bold">JWT SIGNED</span>
-                              </div>
-                              <div className="text-primary/90 flex justify-between mb-1">
-                                  <span>Node Identity:</span>
-                                  <span className="text-foreground">{telemetry.nodeId}</span>
-                              </div>
-                              <div className="text-primary/90 flex justify-between mb-1">
-                                  <span>Authed User:</span>
-                                  <span className="text-foreground font-semibold">{telemetry.authUsername}</span>
-                              </div>
-                              <div className="text-primary/90 flex justify-between">
-                                  <span>Sync Timestamp:</span>
-                                  <span className="text-[10px] text-muted-foreground">{new Date(telemetry.timestamp).toLocaleTimeString()}</span>
-                              </div>
-                          </div>
-                          <div className="bg-[#050510]/80 rounded-lg border border-border/50 p-4 font-mono text-xs shadow-inner">
-                              <div className="text-accent/60 mb-2 border-b border-white/5 pb-1 uppercase tracking-tighter text-[9px] font-bold">Live Authed Dockets (SECURE STACK)</div>
-                              {telemetry.activeDockets?.map((doc: string, idx: number) => (
-                                <div key={idx} className="text-primary/90 mt-1.5 flex items-start gap-2">
-                                    <span className="text-[#10b981] shrink-0 font-bold">&#8226;</span>
-                                    <span>{doc}</span>
-                                </div>
-                              ))}
+                      {/* Right Column: Credentials Rotation */}
+                      <div className="space-y-4">
+                        <div className="bg-[#050510]/80 rounded-lg border border-border/50 p-5 shadow-inner">
+                          <div className="text-primary/80 mb-4 border-b border-white/5 pb-2 uppercase tracking-wide text-xs font-bold flex items-center gap-1.5">
+                            <Key className="w-4 h-4 text-primary" /> Credentials Rotation
                           </div>
 
-                          {/* Dynamic Lattice Latency Monitor */}
-                          <div className="bg-[#050510]/80 rounded-lg border border-border/50 p-4 font-mono text-xs shadow-inner space-y-3">
-                              <div className="text-accent/60 mb-2 border-b border-white/5 pb-1 uppercase tracking-tighter text-[9px] font-bold flex justify-between items-center">
-                                  <span className="flex items-center gap-1.5 text-primary">
-                                    <Activity className="w-3.5 h-3.5 text-primary animate-pulse" /> LATENCY DIAGNOSTICS
-                                  </span>
-                                  <span className="text-[#10b981] font-bold">REAL-TIME</span>
-                              </div>
-                              <div className="grid grid-cols-2 gap-2 text-xs">
-                                  <div className="flex flex-col gap-0.5">
-                                      <span className="text-muted-foreground text-[10px] uppercase">Ping Target</span>
-                                      <span className="text-foreground font-semibold">/api/{pingTarget}</span>
-                                  </div>
-                                  <div className="flex flex-col gap-0.5 items-end">
-                                      <span className="text-muted-foreground text-[10px] uppercase block">Round-Trip Time</span>
-                                      <span className={`font-bold text-sm tracking-tight ${
-                                        lastLatency === null ? "text-muted-foreground" :
-                                        lastLatency < 50 ? "text-[#10b981]" :
-                                        lastLatency < 120 ? "text-yellow-400" : "text-rose-400"
-                                      }`}>
-                                        {lastLatency !== null ? `${lastLatency} ms` : "--- ms"}
-                                      </span>
-                                  </div>
-                              </div>
+                          <form onSubmit={handleChangePassword} className="space-y-3">
+                            <div>
+                              <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">Current Password</label>
+                              <input
+                                type="password"
+                                value={currentPassword}
+                                onChange={(e) => setCurrentPassword(e.target.value)}
+                                placeholder="••••••••"
+                                className="w-full bg-background/50 border border-border/50 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
+                                required
+                              />
+                            </div>
 
-                              {/* Progress bar and rating */}
-                              <div className="flex items-center justify-between text-[10px] bg-white/5 px-2 py-1 rounded border border-white/5">
-                                <span className="text-muted-foreground">LINK HEALTH</span>
-                                <span className={`font-mono font-bold uppercase ${
-                                  lastLatency === null ? "text-muted-foreground" :
-                                  lastLatency < 50 ? "text-[#10b981]" :
-                                  lastLatency < 120 ? "text-yellow-400" : "text-rose-400"
-                                }`}>
-                                  {lastLatency === null ? "PENDING TEST" :
-                                   lastLatency < 30 ? "DIRECT COHERENCE" :
-                                   lastLatency < 50 ? "EXCELLENT" :
-                                   lastLatency < 120 ? "OPTIMAL" :
-                                   lastLatency < 250 ? "STABLE" : "LINK CONGESTED"}
-                                </span>
-                              </div>
+                            <div>
+                              <label className="text-[9px] uppercase font-bold text-muted-foreground block mb-1">New Access Password</label>
+                              <input
+                                type="password"
+                                value={newProfilePassword}
+                                onChange={(e) => setNewProfilePassword(e.target.value)}
+                                placeholder="••••••••"
+                                className="w-full bg-background/50 border border-border/50 rounded px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:border-primary transition-all font-mono"
+                                required
+                              />
+                            </div>
 
-                              {/* Mini graphical track of latency histories */}
-                              <div className="pt-1">
-                                <div className="text-[9px] text-accent font-bold uppercase tracking-wider mb-1.5 flex justify-between">
-                                  <span>RTT HISTORY</span>
-                                  <span className="text-muted-foreground font-normal">Last {latencyHistory.length}/15</span>
-                                </div>
-                                {latencyHistory.length > 0 ? (
-                                  <>
-                                    <div className="h-10 flex items-end gap-1 px-2 py-1.5 bg-[#030308]/60 rounded border border-white/5 relative group justify-between">
-                                      {latencyHistory.map((item, idx) => {
-                                        const heightPercentage = Math.min(100, Math.max(15, (item.latency / 300) * 100));
-                                        const barColor = item.latency < 50 ? "bg-[#10b981]" : item.latency < 120 ? "bg-yellow-500" : "bg-rose-500";
-                                        return (
-                                          <div 
-                                            key={idx} 
-                                            className="flex-1 flex flex-col items-center group/bar relative"
-                                            style={{ height: "100%" }}
-                                          >
-                                            {/* Bar */}
-                                            <div 
-                                              className={`w-full rounded-t-sm ${barColor} opacity-75 hover:opacity-100 transition-all`}
-                                              style={{ height: `${heightPercentage}%` }}
-                                            />
-                                            {/* Tooltip */}
-                                            <div className="absolute bottom-full mb-1 bg-[#0a0a24] text-white text-[8px] font-mono px-1 rounded opacity-0 group-hover/bar:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-30 border border-primary/40 shadow">
-                                              {item.latency}ms ({item.time})
-                                            </div>
-                                          </div>
-                                        );
-                                      })}
-                                    </div>
-                                    <div className="mt-1.5 text-[10px] text-muted-foreground flex justify-between items-center bg-white/5 px-2.5 py-1.5 rounded border border-white/5">
-                                      <span>AVERAGE RTT (LAST 15 MEASUREMENTS)</span>
-                                      <span className="font-bold text-foreground">
-                                        {Math.round(latencyHistory.reduce((sum, item) => sum + item.latency, 0) / latencyHistory.length)} ms
-                                      </span>
-                                    </div>
-                                  </>
-                                ) : (
-                                  <div className="h-10 flex items-center justify-center text-[10px] text-muted-foreground/50 italic bg-[#030308]/60 rounded border border-white/5">
-                                    No latency signals yet. Run a measurement.
-                                  </div>
-                                )}
-                              </div>
-
-                              {/* Active controllers */}
-                              <div className="flex gap-2 pt-1.5">
-                                <button
-                                  type="button"
-                                  onClick={handleManualPing}
-                                  disabled={isPinging}
-                                  className="flex-1 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 py-1 px-2 rounded-md text-[10px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 cursor-pointer font-sans disabled:opacity-50 transition-colors"
-                                >
-                                  {isPinging ? (
-                                    <RefreshCw className="w-3 h-3 animate-spin text-primary" />
-                                  ) : (
-                                    <Zap className="w-3.5 h-3.5 text-primary animate-pulse" />
-                                  )}
-                                  <span>{isPinging ? "pinging..." : "measure link"}</span>
-                                </button>
-                                
-                                <select
-                                  value={pingTarget}
-                                  onChange={(e: any) => setPingTarget(e.target.value)}
-                                  className="bg-background border border-border/50 text-foreground text-[10px] uppercase font-bold tracking-tight rounded-md px-2 py-1 select-none font-mono focus:outline-none focus:border-primary/40"
-                                >
-                                  <option value="telemetry">Secured</option>
-                                  <option value="hello">Public</option>
-                                </select>
-                              </div>
-                          </div>
-                        </>
-                      ) : (
-                        <div className="bg-[#050510]/80 rounded-lg border border-border/50 p-6 min-h-[150px] flex items-center justify-center font-mono text-xs text-muted-foreground italic">
-                          Awaiting synchronization...
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="bg-[#050510]/80 rounded-lg border border-border/50 p-5 font-mono text-xs shadow-inner flex flex-col justify-center items-center text-center">
-                      <div className="text-accent/60 mb-4 border-b border-white/5 pb-1 uppercase tracking-tighter text-[10px] font-bold w-full text-center">Stability Check (S)</div>
-                      <div className="text-5xl font-extrabold text-[#10b981] tracking-tighter">0.99</div>
-                      <div className="mt-4 w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-                          <div className="h-full bg-[#10b981] w-[99%]" />
-                      </div>
-                      <div className="text-[9px] text-[#10b981] mt-2 uppercase tracking-widest font-extrabold flex items-center gap-1">
-                        <ShieldCheck className="w-3.5 h-3.5" /> Securing Accuracy Gateway
-                      </div>
-
-                      {/* Recharts Divergence Score Area Chart */}
-                      <div className="w-full mt-6 pt-4 border-t border-white/5 flex flex-col items-start">
-                        <div className="text-[10px] text-accent font-bold uppercase tracking-wider mb-2">Divergence Score Trend</div>
-                        <div className="h-28 w-full mt-1">
-                          <ResponsiveContainer width="100%" height="100%">
-                            <AreaChart
-                              data={[
-                                { epoch: "04:00", score: 0.15 },
-                                { epoch: "08:00", score: 0.11 },
-                                { epoch: "12:00", score: 0.08 },
-                                { epoch: "16:00", score: 0.05 },
-                                { epoch: "20:00", score: 0.03 },
-                                { epoch: "Live", score: telemetry?.kernelDiagnostics?.divergenceScore ?? 0.02 }
-                              ]}
-                              margin={{ top: 5, right: 5, left: -20, bottom: 0 }}
+                            <button
+                              type="submit"
+                              disabled={profileLoading}
+                              className="w-full bg-[#10b981]/10 hover:bg-[#10b981]/20 border border-[#10b981]/20 text-[#10b981] py-2 px-3 rounded text-xs font-bold transition-all uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer"
                             >
-                              <defs>
-                                <linearGradient id="divergenceColor" x1="0" y1="0" x2="0" y2="1">
-                                  <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
-                                  <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
-                                </linearGradient>
-                              </defs>
-                              <XAxis 
-                                dataKey="epoch" 
-                                stroke="#4b5563" 
-                                fontSize={8}
-                                tickLine={false}
-                                axisLine={false}
-                              />
-                              <YAxis 
-                                stroke="#4b5563" 
-                                fontSize={8}
-                                domain={[0, 0.2]}
-                                tickLine={false}
-                                axisLine={false}
-                              />
-                              <Tooltip
-                                contentStyle={{ 
-                                  backgroundColor: '#0a0a24', 
-                                  borderColor: '#10b981',
-                                  borderRadius: '6px',
-                                  color: '#fff',
-                                  fontSize: '9px',
-                                  fontFamily: 'monospace'
-                                }}
-                                itemStyle={{ color: '#10b981' }}
-                                labelStyle={{ color: '#9ca3af' }}
-                              />
-                              <Area 
-                                type="monotone" 
-                                dataKey="score" 
-                                stroke="#10b981" 
-                                strokeWidth={1.5}
-                                fillOpacity={1} 
-                                fill="url(#divergenceColor)" 
-                              />
-                            </AreaChart>
-                          </ResponsiveContainer>
+                              {profileLoading ? (
+                                <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                              ) : (
+                                <RefreshCw className="w-3.5 h-3.5" />
+                              )}
+                              <span>Rotate Access Key</span>
+                            </button>
+                          </form>
                         </div>
-                        <div className="text-[8px] text-muted-foreground mt-2 w-full text-center">Lower score indicates higher system coherence</div>
+
+                        <div className="p-4 bg-primary/5 border border-primary/10 rounded-lg text-xs leading-normal font-mono text-muted-foreground space-y-2">
+                          <span className="text-[10px] text-primary font-bold uppercase tracking-wider block">Signature Details</span>
+                          <div className="flex justify-between">
+                            <span>Connection:</span>
+                            <span className="text-foreground">Secure Node SSL</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Email Status:</span>
+                            <span className="text-foreground">{profile?.email ? "Verified" : "Unconnected"}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Identity Role:</span>
+                            <span className="text-foreground">{profile?.nodeRole || "Unassigned"}</span>
+                          </div>
+                          <button
+                            onClick={() => setShowProfile(false)}
+                            className="w-full text-center mt-2 pt-2 border-t border-white/5 text-[10px] text-primary hover:text-white transition-colors cursor-pointer block font-bold uppercase tracking-wider"
+                          >
+                            &larr; Return to telemetry stream
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                )}
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="infrastructure-ledger"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                      className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                    >
+                      <div className="space-y-4">
+                        {telemetryLoading ? (
+                          <div className="bg-[#050510]/80 rounded-lg border border-border/50 p-6 min-h-[150px] flex items-center justify-center font-mono text-xs text-primary/60 italic gap-3">
+                            <RefreshCw className="w-4 h-4 animate-spin text-primary" />
+                            Fetching cryptographic secure packets...
+                          </div>
+                        ) : telemetryError ? (
+                          <div className="bg-[#050510]/80 rounded-lg border border-border/50 p-4 min-h-[150px] font-mono text-xs text-red-400 flex flex-col justify-center items-center gap-2">
+                            <AlertCircle className="w-6 h-6 text-red-500 animate-bounce" />
+                            <span>Telemetry Link Loss: {telemetryError}</span>
+                          </div>
+                        ) : telemetry ? (
+                          <>
+                            <div className="bg-[#050510]/80 rounded-lg border border-border/50 p-4 font-mono text-xs shadow-inner">
+                                <div className="text-accent/60 mb-2 border-b border-white/5 pb-1 uppercase tracking-tighter text-[9px] font-bold flex justify-between">
+                                    <span>Node Specifications</span>
+                                    <span className="text-[#10b981] font-bold">JWT SIGNED</span>
+                                </div>
+                                <div className="text-primary/90 flex justify-between mb-1">
+                                    <span>Node Identity:</span>
+                                    <span className="text-foreground">{telemetry.nodeId}</span>
+                                </div>
+                                <div className="text-primary/90 flex justify-between mb-1">
+                                    <span>Authed User:</span>
+                                    <span className="text-foreground font-semibold">{telemetry.authUsername}</span>
+                                </div>
+                                <div className="text-primary/90 flex justify-between">
+                                    <span>Sync Timestamp:</span>
+                                    <span className="text-[10px] text-muted-foreground">{new Date(telemetry.timestamp).toLocaleTimeString()}</span>
+                                </div>
+                            </div>
+                            <div className="bg-[#050510]/80 rounded-lg border border-border/50 p-4 font-mono text-xs shadow-inner">
+                                <div className="text-accent/60 mb-2 border-b border-white/5 pb-1 uppercase tracking-tighter text-[9px] font-bold">Live Authed Dockets (SECURE STACK)</div>
+                                {telemetry.activeDockets?.map((doc: string, idx: number) => (
+                                  <div key={idx} className="text-primary/90 mt-1.5 flex items-start gap-2">
+                                      <span className="text-[#10b981] shrink-0 font-bold">&#8226;</span>
+                                      <span>{doc}</span>
+                                  </div>
+                                ))}
+                            </div>
+
+                            {/* Dynamic Lattice Latency Monitor */}
+                            <div className="bg-[#050510]/80 rounded-lg border border-border/50 p-4 font-mono text-xs shadow-inner space-y-3">
+                                <div className="text-accent/60 mb-2 border-b border-white/5 pb-1 uppercase tracking-tighter text-[9px] font-bold flex justify-between items-center">
+                                    <span className="flex items-center gap-1.5 text-primary">
+                                      <Activity className="w-3.5 h-3.5 text-primary animate-pulse" /> LATENCY DIAGNOSTICS
+                                    </span>
+                                    <span className="text-[#10b981] font-bold">REAL-TIME</span>
+                                </div>
+                                <div className="grid grid-cols-2 gap-2 text-xs">
+                                    <div className="flex flex-col gap-0.5">
+                                        <span className="text-muted-foreground text-[10px] uppercase">Ping Target</span>
+                                        <span className="text-foreground font-semibold">/api/{pingTarget}</span>
+                                    </div>
+                                    <div className="flex flex-col gap-0.5 items-end">
+                                        <span className="text-muted-foreground text-[10px] uppercase block">Round-Trip Time</span>
+                                        <span className={`font-bold text-sm tracking-tight ${
+                                          lastLatency === null ? "text-muted-foreground" :
+                                          lastLatency < 50 ? "text-[#10b981]" :
+                                          lastLatency < 120 ? "text-yellow-400" : "text-rose-400"
+                                        }`}>
+                                          {lastLatency !== null ? `${lastLatency} ms` : "--- ms"}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                {/* Progress bar and rating */}
+                                <div className="flex items-center justify-between text-[10px] bg-white/5 px-2 py-1 rounded border border-white/5">
+                                  <span className="text-muted-foreground">LINK HEALTH</span>
+                                  <span className={`font-mono font-bold uppercase ${
+                                    lastLatency === null ? "text-muted-foreground" :
+                                    lastLatency < 50 ? "text-[#10b981]" :
+                                    lastLatency < 120 ? "text-yellow-400" : "text-rose-400"
+                                  }`}>
+                                    {lastLatency === null ? "PENDING TEST" :
+                                     lastLatency < 30 ? "DIRECT COHERENCE" :
+                                     lastLatency < 50 ? "EXCELLENT" :
+                                     lastLatency < 120 ? "OPTIMAL" :
+                                     lastLatency < 250 ? "STABLE" : "LINK CONGESTED"}
+                                  </span>
+                                </div>
+
+                                {/* Mini graphical track of latency histories */}
+                                <div className="pt-1">
+                                  <div className="text-[9px] text-accent font-bold uppercase tracking-wider mb-1.5 flex justify-between">
+                                    <span>RTT HISTORY</span>
+                                    <span className="text-muted-foreground font-normal">Last {latencyHistory.length}/15</span>
+                                  </div>
+                                  {latencyHistory.length > 0 ? (
+                                    <>
+                                      <div className="h-10 flex items-end gap-1 px-2 py-1.5 bg-[#030308]/60 rounded border border-white/5 relative group justify-between">
+                                        {latencyHistory.map((item, idx) => {
+                                          const heightPercentage = Math.min(100, Math.max(15, (item.latency / 300) * 100));
+                                          const barColor = item.latency < 50 ? "bg-[#10b981]" : item.latency < 120 ? "bg-yellow-500" : "bg-rose-500";
+                                          return (
+                                            <div 
+                                              key={idx} 
+                                              className="flex-1 flex flex-col items-center group/bar relative"
+                                              style={{ height: "100%" }}
+                                            >
+                                              {/* Bar */}
+                                              <div 
+                                                className={`w-full rounded-t-sm ${barColor} opacity-75 hover:opacity-100 transition-all`}
+                                                style={{ height: `${heightPercentage}%` }}
+                                              />
+                                              {/* Tooltip */}
+                                              <div className="absolute bottom-full mb-1 bg-[#0a0a24] text-white text-[8px] font-mono px-1 rounded opacity-0 group-hover/bar:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-30 border border-primary/40 shadow">
+                                                {item.latency}ms ({item.time})
+                                              </div>
+                                            </div>
+                                          );
+                                        })}
+                                      </div>
+                                      <div className="mt-1.5 text-[10px] text-muted-foreground flex justify-between items-center bg-white/5 px-2.5 py-1.5 rounded border border-white/5">
+                                        <span>AVERAGE RTT (LAST 15 MEASUREMENTS)</span>
+                                        <span className="font-bold text-foreground">
+                                          {Math.round(latencyHistory.reduce((sum, item) => sum + item.latency, 0) / latencyHistory.length)} ms
+                                        </span>
+                                      </div>
+                                    </>
+                                  ) : (
+                                    <div className="h-10 flex items-center justify-center text-[10px] text-muted-foreground/50 italic bg-[#030308]/60 rounded border border-white/5">
+                                      No latency signals yet. Run a measurement.
+                                    </div>
+                                  )}
+                                </div>
+
+                                {/* Active controllers */}
+                                <div className="flex gap-2 pt-1.5">
+                                  <button
+                                    type="button"
+                                    onClick={handleManualPing}
+                                    disabled={isPinging}
+                                    className="flex-1 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 py-1 px-2 rounded-md text-[10px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 cursor-pointer font-sans disabled:opacity-50 transition-colors"
+                                  >
+                                    {isPinging ? (
+                                      <RefreshCw className="w-3 h-3 animate-spin text-primary" />
+                                    ) : (
+                                      <Zap className="w-3.5 h-3.5 text-primary animate-pulse" />
+                                    )}
+                                    <span>{isPinging ? "pinging..." : "measure link"}</span>
+                                  </button>
+                                  
+                                  <select
+                                    value={pingTarget}
+                                    onChange={(e: any) => setPingTarget(e.target.value)}
+                                    className="bg-background border border-border/50 text-foreground text-[10px] uppercase font-bold tracking-tight rounded-md px-2 py-1 select-none font-mono focus:outline-none focus:border-primary/40"
+                                  >
+                                    <option value="telemetry">Secured</option>
+                                    <option value="hello">Public</option>
+                                  </select>
+                                </div>
+                            </div>
+                          </>
+                        ) : (
+                          <div className="bg-[#050510]/80 rounded-lg border border-border/50 p-6 min-h-[150px] flex items-center justify-center font-mono text-xs text-muted-foreground italic">
+                            Awaiting synchronization...
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="bg-[#050510]/80 rounded-lg border border-border/50 p-5 font-mono text-xs shadow-inner flex flex-col justify-center items-center text-center">
+                        <div className="text-accent/60 mb-4 border-b border-white/5 pb-1 uppercase tracking-tighter text-[10px] font-bold w-full text-center">Stability Check (S)</div>
+                        <div className="text-5xl font-extrabold text-[#10b981] tracking-tighter">0.99</div>
+                        <div className="mt-4 w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+                            <div className="h-full bg-[#10b981] w-[99%]" />
+                        </div>
+                        <div className="text-[9px] text-[#10b981] mt-2 uppercase tracking-widest font-extrabold flex items-center gap-1">
+                          <ShieldCheck className="w-3.5 h-3.5" /> Securing Accuracy Gateway
+                        </div>
+
+                        {/* Recharts Divergence Score Area Chart */}
+                        <div className="w-full mt-6 pt-4 border-t border-white/5 flex flex-col items-start">
+                          <div className="text-[10px] text-accent font-bold uppercase tracking-wider mb-2">Divergence Score Trend</div>
+                          <div className="h-28 w-full mt-1">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <AreaChart
+                                data={[
+                                  { epoch: "04:00", score: 0.15 },
+                                  { epoch: "08:00", score: 0.11 },
+                                  { epoch: "12:00", score: 0.08 },
+                                  { epoch: "16:00", score: 0.05 },
+                                  { epoch: "20:00", score: 0.03 },
+                                  { epoch: "Live", score: telemetry?.kernelDiagnostics?.divergenceScore ?? 0.02 }
+                                ]}
+                                margin={{ top: 5, right: 5, left: -20, bottom: 0 }}
+                              >
+                                <defs>
+                                  <linearGradient id="divergenceColor" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
+                                    <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                                  </linearGradient>
+                                </defs>
+                                <XAxis 
+                                  dataKey="epoch" 
+                                  stroke="#4b5563" 
+                                  fontSize={8}
+                                  tickLine={false}
+                                  axisLine={false}
+                                />
+                                <YAxis 
+                                  stroke="#4b5563" 
+                                  fontSize={8}
+                                  domain={[0, 0.2]}
+                                  tickLine={false}
+                                  axisLine={false}
+                                />
+                                <Tooltip
+                                  contentStyle={{ 
+                                    backgroundColor: '#0a0a24', 
+                                    borderColor: '#10b981',
+                                    borderRadius: '6px',
+                                    color: '#fff',
+                                    fontSize: '9px',
+                                    fontFamily: 'monospace'
+                                  }}
+                                  itemStyle={{ color: '#10b981' }}
+                                  labelStyle={{ color: '#9ca3af' }}
+                                />
+                                <Area 
+                                  type="monotone" 
+                                  dataKey="score" 
+                                  stroke="#10b981" 
+                                  strokeWidth={1.5}
+                                  fillOpacity={1} 
+                                  fill="url(#divergenceColor)" 
+                                />
+                              </AreaChart>
+                            </ResponsiveContainer>
+                          </div>
+                          <div className="text-[8px] text-muted-foreground mt-2 w-full text-center">Lower score indicates higher system coherence</div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
           </div>
